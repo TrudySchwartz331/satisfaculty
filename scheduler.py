@@ -15,7 +15,7 @@ class InstructorScheduler:
     def __init__(self, time_slots = range(2)):
         self.time_slots = time_slots
         
-    def load_rooms(self, filename: str = 'rooms.csv'):
+    def load_rooms(self, filename: str = 'data/rooms.csv'):
         """Load room data from CSV file."""
         try:
             self.rooms_df = pd.read_csv(filename)
@@ -35,7 +35,7 @@ class InstructorScheduler:
             print(f"Error loading rooms: {e}")
             return None
     
-    def load_courses(self, filename: str = 'courses.csv'):
+    def load_courses(self, filename: str = 'data/courses.csv'):
         """Load course data from CSV file."""
         try:
             self.courses_df = pd.read_csv(filename)
@@ -147,7 +147,7 @@ class InstructorScheduler:
         else:
             print("No schedule available. Please run optimize_schedule() first.")
 
-    def save_schedule(self, filename: str = 'schedule.csv'):
+    def save_schedule(self, filename: str = 'output/schedule.csv'):
         """Save the optimized schedule to a CSV file."""
         if self.schedule is not None:
             self.schedule.to_csv(filename, index=False)
