@@ -66,53 +66,46 @@ class InstructorScheduler:
         
         # Extract input parameters
         courses = list(self.courses_df['Course'])
-        enrollments = list(self.courses_df['Enrollment'])
         rooms = list(self.rooms_df['Room'])
-        capacities = list(self.rooms_df['Capacity'])
-        time_slots = self.time_slots
+        time_slots = list(self.time_slots)
         instructors = list(self.courses_df['Instructor'].unique())
 
-        # Create matrix a; a[(i, c)] = 1 if instructor i teaches course c
+        # Create dictionaries for enrollments and capacities
+        enrollments = dict(zip(self.courses_df['Course'], self.courses_df['Enrollment']))
+        capacities = dict(zip(self.rooms_df['Room'], self.rooms_df['Capacity']))
+
+        # Create matrix a; a[(instructor, course)] = 1 if instructor teaches course
         a = {}
-        for i, instructor in enumerate(instructors):
-            for j, course in enumerate(courses):
+        for instructor in instructors:
+            for course in courses:
                 if instructor in self.courses_df[self.courses_df['Course'] == course]['Instructor'].values:
-                    a[(i, j)] = 1
+                    a[(instructor, course)] = 1
                 else:
-                    a[(i, j)] = 0
-        
-        # Store dimensions
-        n_courses = len(courses)
-        n_rooms = len(rooms)
-        n_timeslots = len(time_slots)
-        
+                    a[(instructor, course)] = 0
+
         # Create binary decision variables using LpVariable.dicts
-        # x[(c,r,t)] = 1 if course c is assigned to room r at time slot t
-        indices = [(c, r, t) for c in range(n_courses) 
-                             for r in range(n_rooms) 
-                             for t in range(n_timeslots)]
+        # x[(course, room, time)] = 1 if course is assigned to room at time slot
+        indices = [(course, room, t) for course in courses for room in rooms for t in time_slots]
         x = LpVariable.dicts("x", indices, cat='Binary')
-        
-        self.decision_vars = x
 
         # Course must be taught once
-        for c in range(n_courses):
-            prob += lpSum(x[(c, r, t)] for r in range(n_rooms) for t in range(n_timeslots)) == 1
+        for course in courses:
+            prob += lpSum(x[(course, room, t)] for room in rooms for t in time_slots) == 1
 
         # Instructor can only be teaching one course at a time
-        for i in range(len(instructors)):
-            for t in range(n_timeslots):
-                prob += lpSum(x[(c, r, t)]*a[(i,c)] for c in range(n_courses) for r in range(n_rooms)) <= 1
+        for instructor in instructors:
+            for t in time_slots:
+                prob += lpSum(x[(course, room, t)] * a[(instructor, course)] for course in courses for room in rooms) <= 1
 
         # Room can only have one course at a time
-        for r in range(n_rooms):
-            for t in range(n_timeslots):
-                prob += lpSum(x[(c, r, t)] for c in range(n_courses)) <= 1
+        for room in rooms:
+            for t in time_slots:
+                prob += lpSum(x[(course, room, t)] for course in courses) <= 1
 
         # Room capacity constraints
-        for r in range(n_rooms):
-            for t in range(n_timeslots):
-                prob += lpSum(x[(c, r, t)] * enrollments[c] for c in range(n_courses)) <= capacities[r]
+        for room in rooms:
+            for t in time_slots:
+                prob += lpSum(x[(course, room, t)] * enrollments[course] for course in courses) <= capacities[room]
         
         # Solve the problem
         prob.solve()
@@ -125,15 +118,15 @@ class InstructorScheduler:
 
         # Create the schedule (dataframe with course, room, time slot)
         schedule_data = []
-        for c in range(n_courses):
-            for r in range(n_rooms):
-                for t in range(n_timeslots):
-                    if x[(c, r, t)].varValue == 1:
+        for course in courses:
+            for room in rooms:
+                for t in time_slots:
+                    if x[(course, room, t)].varValue == 1:
                         schedule_data.append({
-                            'Course': courses[c],
-                            'Room': rooms[r],
-                            'Time Slot': time_slots[t],
-                            'Instructor': self.courses_df[self.courses_df['Course'] == courses[c]]['Instructor'].values[0]
+                            'Course': course,
+                            'Room': room,
+                            'Time Slot': t,
+                            'Instructor': self.courses_df[self.courses_df['Course'] == course]['Instructor'].values[0]
                         })
         self.schedule = pd.DataFrame(schedule_data)
 
