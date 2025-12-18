@@ -10,6 +10,7 @@ from pulp import *
 import csv
 from typing import Dict, List, Tuple, Optional, Callable, Iterable
 from visualize_schedule import visualize_schedule
+from utils import time_to_minutes, expand_days
 
 
 # Sentinel value for "match all" in filter_keys
@@ -183,10 +184,32 @@ class InstructorScheduler:
             for t in time_slots:
                 prob += lpSum(x[k] * a[(instructor, k[0])] for k in filter_keys(key_set, time_slot=t)) <= 1
 
-        # Room can only have one course at a time
+        # Create dictionaries for time slot start and end times (in minutes)
+        slot_start_minutes = {slot: time_to_minutes(start)
+                             for slot, start in zip(self.time_slots_df['Slot'], self.time_slots_df['Start'])}
+        slot_end_minutes = {slot: time_to_minutes(end)
+                           for slot, end in zip(self.time_slots_df['Slot'], self.time_slots_df['End'])}
+        slot_days = {slot: set(expand_days(days))
+                    for slot, days in zip(self.time_slots_df['Slot'], self.time_slots_df['Days'])}
+
+        # Room can only have one course at a time (checking for overlaps with 15-minute buffer)
         for room in rooms:
             for t in time_slots:
-                prob += lpSum(x[k] for k in filter_keys(key_set, room=room, time_slot=t)) <= 1
+                t_start_minutes = slot_start_minutes[t]
+                t_days = slot_days[t]
+
+                def overlaps_with_t(course: str, r: str, slot: str) -> bool:
+                    if r != room:
+                        return False
+                    # Check if days overlap
+                    if not slot_days[slot] & t_days:  # No common days
+                        return False
+                    slot_start = slot_start_minutes[slot]
+                    slot_end = slot_end_minutes[slot]
+                    # Check if slot starts at or before t starts and ends after (t_start - 15 minutes)
+                    return slot_start <= t_start_minutes and slot_end > (t_start_minutes - 15)
+
+                prob += lpSum(x[k] for k in filter_keys(key_set, predicate=overlaps_with_t)) <= 1
 
         # Room capacity constraints
         for room in rooms:

@@ -10,30 +10,7 @@ import matplotlib.patches as mpatches
 from matplotlib.patches import Rectangle
 from datetime import datetime, timedelta
 import numpy as np
-
-
-def time_to_minutes(time_str):
-    """Convert time string HH:MM to minutes since midnight."""
-    h, m = map(int, time_str.split(':'))
-    return h * 60 + m
-
-
-def minutes_to_time(minutes):
-    """Convert minutes since midnight to time string HH:MM."""
-    h = minutes // 60
-    m = minutes % 60
-    return f"{h:02d}:{m:02d}"
-
-
-def expand_days(days_str):
-    """Expand day codes to individual days. MWF -> [M, W, F], TTH -> [T, TH]"""
-    if days_str == "MWF":
-        return ['M', 'W', 'F']
-    elif days_str == "TTH":
-        return ['T', 'TH']
-    else:
-        # Single day (M, T, W, TH, F)
-        return [days_str]
+from utils import time_to_minutes, minutes_to_time, expand_days
 
 
 def visualize_schedule(schedule_df, rooms_df, output_file='output/schedule_visual.png'):
