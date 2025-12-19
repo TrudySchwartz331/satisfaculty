@@ -69,13 +69,9 @@ def visualize_schedule(schedule_df, rooms_df, output_file='output/schedule_visua
         ax.set_xlim(min_time, max_time)
         ax.set_ylim(-0.5, len(rooms) - 0.5)
 
-        # Draw grid
+        # Draw horizontal lines between rooms (behind boxes)
         for i in range(len(rooms) + 1):
             ax.axhline(i - 0.5, color='gray', linewidth=0.5)
-
-        # Draw hour lines
-        for hour in range(min_time // 60, max_time // 60 + 1):
-            ax.axvline(hour * 60, color='gray', linewidth=0.5, alpha=0.3)
 
         # Plot courses
         for _, course in day_schedule.iterrows():
@@ -92,8 +88,14 @@ def visualize_schedule(schedule_df, rooms_df, output_file='output/schedule_visua
             # Add course text
             text_x = start + duration / 2
             text_y = room_idx
-            ax.text(text_x, text_y, course['Course'],
+            ax.text(text_x, text_y + 0.15, course['Course'],
                    ha='center', va='center', fontsize=8, weight='bold')
+            ax.text(text_x, text_y - 0.15, f"({course['Instructor']})",
+                   ha='center', va='center', fontsize=7)
+
+        # Draw vertical hour lines (in front of boxes)
+        for hour in range(min_time // 60, max_time // 60 + 1):
+            ax.axvline(hour * 60, color='gray', linewidth=0.5, alpha=0.3)
 
         # Set room labels
         room_labels = [f"{room} ({room_capacity.get(room, '?')})" for room in rooms]
@@ -111,7 +113,6 @@ def visualize_schedule(schedule_df, rooms_df, output_file='output/schedule_visua
         ax.set_title(day_names.get(day, day), fontsize=14, weight='bold')
         ax.set_xlabel('Time')
         ax.set_ylabel('Room (Capacity)')
-        ax.grid(True, alpha=0.3)
 
     plt.tight_layout()
     plt.savefig(output_file, dpi=150, bbox_inches='tight')
