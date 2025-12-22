@@ -13,6 +13,8 @@ from satisfaculty import (
     NoInstructorOverlap,
     NoRoomOverlap,
     RoomCapacity,
+    ForceRooms,
+    ForceTimeSlots,
     # Objectives
     MinimizeClassesBefore,
     MinimizeClassesAfter,
@@ -30,6 +32,8 @@ scheduler.add_constraints([
     NoInstructorOverlap(),
     NoRoomOverlap(),
     RoomCapacity(),
+    ForceRooms(),
+    ForceTimeSlots(),
 ])
 
 # Define optimization objectives (in priority order)

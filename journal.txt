@@ -22,9 +22,11 @@
 [X] Update to real times with a flexible schedule
 [X] Names in output viz
 [X] Add notes to courses.csv
-[ ] Pull out main constraints
+[X] Pull out main constraints
 [ ] Force Room
 [ ] Force Time Slot
+[ ] Lab start times
+[ ] Cohort constraints
 [ ] Add objectives
 [ ] add slack weights
 [X] rename data to input

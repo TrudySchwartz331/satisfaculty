@@ -5,6 +5,7 @@ Core constraint classes for schedule optimization.
 These define the feasibility requirements that all valid schedules must satisfy.
 """
 
+import pandas as pd
 from .constraint_base import ConstraintBase
 from pulp import lpSum
 from .scheduler import filter_keys
@@ -87,6 +88,52 @@ class RoomCapacity(ConstraintBase):
                         for k in filter_keys(scheduler.keys, room=room, time_slot=t)
                     ) <= scheduler.capacities[room],
                     f"room_capacity_{room}_{t}"
+                )
+                count += 1
+        return count
+
+
+class ForceRooms(ConstraintBase):
+    """Forces specific courses to be assigned to specific rooms."""
+
+    def __init__(self, filename: str = 'input/courses.csv', column: str = 'Force Room'):
+        self.filename = filename
+        self.column = column
+        super().__init__(name=f"Force rooms ({column})")
+
+    def apply(self, scheduler) -> int:
+        df = pd.read_csv(self.filename)
+        count = 0
+        for _, row in df.iterrows():
+            course = row['Course']
+            forced_room = row[self.column]
+            if pd.notna(forced_room) and forced_room != '':
+                scheduler.prob += (
+                    lpSum(scheduler.x[k] for k in filter_keys(scheduler.keys, course=course, room=forced_room)) == 1,
+                    f"force_room_{course}"
+                )
+                count += 1
+        return count
+
+
+class ForceTimeSlots(ConstraintBase):
+    """Forces specific courses to be assigned to specific time slots."""
+
+    def __init__(self, filename: str = 'input/courses.csv', column: str = 'Force Time Slot'):
+        self.filename = filename
+        self.column = column
+        super().__init__(name=f"Force time slots ({column})")
+
+    def apply(self, scheduler) -> int:
+        df = pd.read_csv(self.filename)
+        count = 0
+        for _, row in df.iterrows():
+            course = row['Course']
+            forced_slot = row[self.column]
+            if pd.notna(forced_slot) and forced_slot != '':
+                scheduler.prob += (
+                    lpSum(scheduler.x[k] for k in filter_keys(scheduler.keys, course=course, time_slot=forced_slot)) == 1,
+                    f"force_time_slot_{course}"
                 )
                 count += 1
         return count

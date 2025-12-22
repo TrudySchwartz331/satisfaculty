@@ -11,6 +11,8 @@ from .constraints import (
     NoInstructorOverlap,
     NoRoomOverlap,
     RoomCapacity,
+    ForceRooms,
+    ForceTimeSlots,
 )
 from .visualize_schedule import visualize_schedule
 
@@ -25,6 +27,8 @@ __all__ = [
     "NoInstructorOverlap",
     "NoRoomOverlap",
     "RoomCapacity",
+    "ForceRooms",
+    "ForceTimeSlots",
     # Utilities
     "visualize_schedule",
 ]
