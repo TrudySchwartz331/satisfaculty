@@ -1,11 +1,17 @@
 # Satisfaculty
 
-A course scheduling optimization tool using integer linear programming.
+A python course scheduling optimization tool using integer linear programming.
 
 ## Installation
 
 ```bash
 pip install satisfaculty
+```
+
+For the latest development version:
+
+```bash
+pip install git+https://github.com/zsunberg/satisfaculty.git
 ```
 
 ## Usage
@@ -34,3 +40,8 @@ Example data files are available in the [`example/`](https://github.com/zsunberg
 ## Documentation
 
 - [Objectives Guide](docs/OBJECTIVES_GUIDE.md)
+
+## Acknowledgements
+
+- [Melissa Piper](https://github.com/piperm-explore) for inspiring the schedule visualization with her excellent excel schedules
+- [Claude Code](https://claude.ai/code) for assistance with development
