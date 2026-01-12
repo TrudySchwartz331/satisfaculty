@@ -1,6 +1,6 @@
 # Satisfaculty
 
-A python course scheduling optimization tool using integer linear programming.
+A python course scheduling optimization tool that uses integer linear programming.
 
 ## Installation
 
