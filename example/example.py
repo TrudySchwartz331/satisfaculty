@@ -18,7 +18,7 @@ scheduler.add_constraints([
     AssignAllCourses(),
     NoInstructorOverlap(),
     NoRoomOverlap(),
-    #RoomCapacity(),
+    RoomCapacity(),
     ForceRooms(),
     ForceTimeSlots(),
 ])

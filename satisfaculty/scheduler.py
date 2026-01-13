@@ -241,7 +241,6 @@ class InstructorScheduler:
             for room in self.rooms
             for t in self.time_slots
             if self.course_types[course] == self.slot_types[t]
-             and self.enrollments[course] <= self.capacities[room] #Added and instead of using RoomCapacity()
         ])
         self.x = LpVariable.dicts("x", list(self.keys), cat='Binary')
 

@@ -80,15 +80,10 @@ class RoomCapacity(ConstraintBase):
 
     def apply(self, scheduler) -> int:
         count = 0
-        for room in scheduler.rooms:
-            for t in scheduler.time_slots:
-                scheduler.prob += (
-                    lpSum(
-                        scheduler.x[k] * scheduler.enrollments[k[0]]
-                        for k in filter_keys(scheduler.keys, room=room, time_slot=t)
-                    ) <= scheduler.capacities[room],
-                    f"room_capacity_{room}_{t}"
-                )
+        for k in scheduler.keys:
+            course, room, _ = k
+            if scheduler.enrollments[course] > scheduler.capacities[room]:
+                scheduler.prob += (scheduler.x[k] == 0, f"room_capacity_{k}")
                 count += 1
         return count
 
