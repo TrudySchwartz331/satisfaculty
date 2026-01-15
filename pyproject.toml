@@ -9,7 +9,7 @@ description = "A course scheduling optimization tool using integer linear progra
 authors = [{name = "Zachary Sunberg", email = "zachary.sunberg@colorado.edu"}]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = "~=3.10"
+requires-python = "~=3.12"
 classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
