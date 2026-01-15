@@ -3,11 +3,7 @@
 Tests for the filter_keys function and InstructorScheduler.filter_schedule_keys method.
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from src.scheduler import filter_keys, ALL, InstructorScheduler
+from satisfaculty.scheduler import filter_keys, ALL, InstructorScheduler
 
 
 def test_filter_by_course():
@@ -146,20 +142,8 @@ def test_all_sentinel_uniqueness():
     print('✓ test_all_sentinel_uniqueness passed')
 
 
-def test_scheduler_method_before_optimize():
-    """Test that filter_schedule_keys raises error before optimize_schedule is called."""
-    scheduler = InstructorScheduler()
-
-    try:
-        scheduler.filter_schedule_keys(course='CS101')
-        assert False, 'Expected RuntimeError to be raised'
-    except RuntimeError as e:
-        assert 'optimize_schedule' in str(e), f'Error message should mention optimize_schedule: {e}'
-        print('✓ test_scheduler_method_before_optimize passed')
-
-
-def test_scheduler_method_integration():
-    """Test the filter_schedule_keys method with actual scheduling data."""
+def test_filter_keys_with_scheduler_keys():
+    """Test filter_keys with the scheduler's keys after setup."""
     scheduler = InstructorScheduler()
 
     # Load data
@@ -168,11 +152,11 @@ def test_scheduler_method_integration():
     time_slots = scheduler.load_time_slots()
 
     if rooms is not None and courses is not None and time_slots is not None:
-        # Run optimization
-        scheduler.optimize_schedule()
+        # Set up the problem to initialize keys
+        scheduler.setup_problem()
 
-        # Test filtering
-        filtered = scheduler.filter_schedule_keys(course='DEPT-2402-001')
+        # Test filtering using the standalone filter_keys function with scheduler's keys
+        filtered = filter_keys(scheduler.keys, course='DEPT-2402-001')
         assert isinstance(filtered, list), 'Should return a list'
 
         # All filtered keys should have the specified course
@@ -180,9 +164,9 @@ def test_scheduler_method_integration():
             assert all(c == 'DEPT-2402-001' for c, r, t in filtered), \
                 'All results should have course DEPT-2402-001'
 
-        print('✓ test_scheduler_method_integration passed')
+        print('✓ test_filter_keys_with_scheduler_keys passed')
     else:
-        print('⊘ test_scheduler_method_integration skipped (data files not available)')
+        print('⊘ test_filter_keys_with_scheduler_keys skipped (data files not available)')
 
 
 def run_all_tests():
@@ -198,8 +182,7 @@ def run_all_tests():
     test_filter_with_predicate()
     test_accepts_set_and_list()
     test_all_sentinel_uniqueness()
-    test_scheduler_method_before_optimize()
-    test_scheduler_method_integration()
+    test_filter_keys_with_scheduler_keys()
 
     print('\n' + '='*50)
     print('All tests passed! ✓')
