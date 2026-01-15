@@ -14,7 +14,7 @@ from satisfaculty import InstructorScheduler, AssignAllCourses, NoRoomOverlap
 
 
 def test_infeasible_two_courses_one_slot():
-    """Test that violated constraints are printed when problem is infeasible.
+    """Test that infeasible problems return None and print_violated_constraints works.
 
     Creates a scenario with 2 courses, 1 room, and 1 time slot - impossible to satisfy.
     """
@@ -50,17 +50,19 @@ def test_infeasible_two_courses_one_slot():
             NoRoomOverlap(),
         ])
 
-        # Capture stdout
-        output = io.StringIO()
-        with redirect_stdout(output):
-            result = scheduler.optimize_schedule()
-
-        stdout_text = output.getvalue()
+        result = scheduler.optimize_schedule()
 
         # Should return None (no solution)
         assert result is None, 'Expected no solution for infeasible problem'
 
-        # Should print violated constraints
+        # Verify print_violated_constraints() can be called manually
+        output = io.StringIO()
+        with redirect_stdout(output):
+            scheduler.print_violated_constraints()
+
+        stdout_text = output.getvalue()
+
+        # Should print violated constraints when called manually
         assert 'Violated constraints:' in stdout_text, f'Expected violation output, got: {stdout_text}'
 
         # The room overlap or assign constraint should be violated

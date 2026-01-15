@@ -285,7 +285,6 @@ class InstructorScheduler:
         # Check if the problem is solved
         if LpStatus[self.prob.status] != 'Optimal':
             print("No solution found")
-            self.print_violated_constraints()
             self.schedule = None
             return
 
@@ -380,7 +379,6 @@ class InstructorScheduler:
             status = LpStatus[self.prob.status]
             if status != 'Optimal':
                 print(f"  ✗ No solution found (status: {status})")
-                self.print_violated_constraints()
                 self.schedule = None
                 return None
 
