@@ -285,12 +285,20 @@ class InstructorScheduler:
         # Check if the problem is solved
         if LpStatus[self.prob.status] != 'Optimal':
             print("No solution found")
+            self.print_violated_constraints()
             self.schedule = None
             return
 
         # Extract schedule from solution
         self._extract_schedule()
         return self.schedule
+
+    def print_violated_constraints(self):
+        """Print the names of constraints that are not satisfied."""
+        print("\nViolated constraints:")
+        for name, constraint in self.prob.constraints.items():
+            if not constraint.valid():
+                print(f"  {name}")
 
     def _extract_schedule(self):
         """Extract schedule from solved problem into a DataFrame."""
@@ -372,6 +380,7 @@ class InstructorScheduler:
             status = LpStatus[self.prob.status]
             if status != 'Optimal':
                 print(f"  ✗ No solution found (status: {status})")
+                self.print_violated_constraints()
                 self.schedule = None
                 return None
 
