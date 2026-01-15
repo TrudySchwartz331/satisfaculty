@@ -124,17 +124,37 @@ class InstructorScheduler:
             print(f"Error loading rooms: {e}")
             return None
     
-    def load_courses(self, filename: str = 'courses.csv'):
-        """Load course data from CSV file."""
+    def load_courses(self, filename: str = 'courses.csv', ignore_column: str | None = 'Ignore'):
+        """Load course data from CSV file.
+
+        Args:
+            filename: Path to the CSV file containing course data.
+            ignore_column: Column name to check for ignored courses. Courses with
+                truthy values (TRUE, 1, yes) in this column will be excluded from
+                scheduling. Defaults to 'Ignore'. Set to None to disable filtering.
+        """
         try:
             self.courses_df = pd.read_csv(filename)
-            
+
             # Check for duplicate courses
             courses = self.courses_df['Course']
             if len(courses) != len(courses.unique()):
                 duplicates = courses[courses.duplicated()].unique()
                 raise ValueError(f"Duplicate courses found: {list(duplicates)}")
-            
+
+            # Filter out ignored courses if ignore_column is specified and exists
+            if ignore_column is not None and ignore_column in self.courses_df.columns:
+                original_count = len(self.courses_df)
+                # Check for truthy values (TRUE, 1, yes, case-insensitive)
+                ignore_mask = self.courses_df[ignore_column].apply(
+                    lambda x: pd.notna(x) and str(x).strip().lower() in ('true', '1', 'yes')
+                )
+                self.courses_df = self.courses_df[~ignore_mask]
+                ignored_count = original_count - len(self.courses_df)
+
+                if ignored_count > 0:
+                    print(f"Ignored {ignored_count} course(s) based on '{ignore_column}' column")
+
             print(f"Loaded {len(self.courses_df)} courses from {filename}")
             return self.courses_df
         except FileNotFoundError:
