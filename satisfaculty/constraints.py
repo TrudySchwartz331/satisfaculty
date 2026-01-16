@@ -88,21 +88,43 @@ class RoomCapacity(ConstraintBase):
         return count
 
 
+class AvoidRoomsForCourseType(ConstraintBase):
+    """Disallow specific rooms for a given course type."""
+
+    def __init__(self, rooms: list[str], course_type: str):
+        self.rooms = set(rooms)
+        self.course_type = course_type
+        super().__init__(name=f"Avoid rooms ({', '.join(rooms)}) for {course_type}")
+
+    def apply(self, scheduler) -> int:
+        count = 0
+        for course, room, time_slot in scheduler.keys:
+            if scheduler.course_types[course] == self.course_type and room in self.rooms:
+                scheduler.x[(course, room, time_slot)].upBound = 0
+                count += 1
+        return count
+
+
 class ForceRooms(ConstraintBase):
     """Forces specific courses to be assigned to specific rooms."""
 
-    def __init__(self, filename: str = 'courses.csv', column: str = 'Force Room'):
+    def __init__(self, filename: str = 'courses.csv', column: str = 'Force Room', ignore_column: str = 'Ignore'):
         self.filename = filename
         self.column = column
+        self.ignore_column = ignore_column
         super().__init__(name=f"Force rooms ({column})")
 
     def apply(self, scheduler) -> int:
         df = pd.read_csv(self.filename)
-        for col in ['Course', self.column]:
+        for col in ['Course', self.column, self.ignore_column]:
             if col in df.columns:
                 df[col] = df[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
         count = 0
         for _, row in df.iterrows():
+            if self.ignore_column in row and pd.notna(row[self.ignore_column]):
+                ignore_val = str(row[self.ignore_column]).strip().lower()
+                if ignore_val in ('true', '1', 'yes'):
+                    continue
             course = row['Course']
             forced_room = row[self.column]
             if pd.notna(forced_room) and forced_room != '':
@@ -117,18 +139,23 @@ class ForceRooms(ConstraintBase):
 class ForceTimeSlots(ConstraintBase):
     """Forces specific courses to be assigned to specific time slots."""
 
-    def __init__(self, filename: str = 'courses.csv', column: str = 'Force Time Slot'):
+    def __init__(self, filename: str = 'courses.csv', column: str = 'Force Time Slot', ignore_column: str = 'Ignore'):
         self.filename = filename
         self.column = column
+        self.ignore_column = ignore_column
         super().__init__(name=f"Force time slots ({column})")
 
     def apply(self, scheduler) -> int:
         df = pd.read_csv(self.filename)
-        for col in ['Course', self.column]:
+        for col in ['Course', self.column, self.ignore_column]:
             if col in df.columns:
                 df[col] = df[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
         count = 0
         for _, row in df.iterrows():
+            if self.ignore_column in row and pd.notna(row[self.ignore_column]):
+                ignore_val = str(row[self.ignore_column]).strip().lower()
+                if ignore_val in ('true', '1', 'yes'):
+                    continue
             course = row['Course']
             forced_slot = row[self.column]
             if pd.notna(forced_slot) and forced_slot != '':

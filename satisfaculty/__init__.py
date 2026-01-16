@@ -5,12 +5,14 @@ from .objectives import (
     MinimizeClassesBefore,
     MinimizeClassesAfter,
     MaximizePreferredRooms,
+    MinimizePreferredRooms,
 )
 from .constraints import (
     AssignAllCourses,
     NoInstructorOverlap,
     NoRoomOverlap,
     RoomCapacity,
+    AvoidRoomsForCourseType,
     ForceRooms,
     ForceTimeSlots,
 )
@@ -22,11 +24,13 @@ __all__ = [
     "MinimizeClassesBefore",
     "MinimizeClassesAfter",
     "MaximizePreferredRooms",
+    "MinimizePreferredRooms",
     # Constraints
     "AssignAllCourses",
     "NoInstructorOverlap",
     "NoRoomOverlap",
     "RoomCapacity",
+    "AvoidRoomsForCourseType",
     "ForceRooms",
     "ForceTimeSlots",
     # Utilities

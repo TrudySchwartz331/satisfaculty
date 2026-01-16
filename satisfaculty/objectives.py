@@ -197,3 +197,62 @@ class MaximizePreferredRooms(ObjectiveBase):
 
         filtered = filter_keys(scheduler.keys, predicate=matches_criteria)
         return lpSum(scheduler.x[k] for k in filtered)
+
+
+class MinimizePreferredRooms(ObjectiveBase):
+    """
+    Minimize use of specific rooms.
+
+    Useful for avoiding overflow rooms or locations that should be last-resort.
+    """
+
+    def __init__(
+        self,
+        preferred_rooms: List[str],
+        instructor: Optional[str] = None,
+        course_type: Optional[str] = None,
+        tolerance: float = 0.0
+    ):
+        """
+        Args:
+            preferred_rooms: List of room names to avoid
+            instructor: If specified, only for this instructor's classes
+            course_type: If specified, only for this type ('Lecture' or 'Lab')
+            tolerance: Fractional tolerance for lexicographic constraint
+        """
+        self.preferred_rooms = set(preferred_rooms)
+        self.instructor = instructor
+        self.course_type = course_type
+
+        name_parts = [f"preferred rooms ({', '.join(preferred_rooms)})"]
+        if instructor:
+            name_parts.append(f"for {instructor}")
+        if course_type:
+            name_parts.append(f"({course_type})")
+
+        super().__init__(
+            name=f"Minimize {' '.join(name_parts)}",
+            sense='minimize',
+            tolerance=tolerance
+        )
+
+    def evaluate(self, scheduler):
+        def matches_criteria(course, room, time_slot):
+            if room not in self.preferred_rooms:
+                return False
+
+            if self.instructor:
+                course_instructor = scheduler.courses_df[
+                    scheduler.courses_df['Course'] == course
+                ]['Instructor'].values[0]
+                if course_instructor != self.instructor:
+                    return False
+
+            if self.course_type:
+                if scheduler.course_types[course] != self.course_type:
+                    return False
+
+            return True
+
+        filtered = filter_keys(scheduler.keys, predicate=matches_criteria)
+        return lpSum(scheduler.x[k] for k in filtered)
