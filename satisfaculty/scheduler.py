@@ -136,6 +136,13 @@ class InstructorScheduler:
         try:
             self.courses_df = pd.read_csv(filename)
 
+            strip_columns = ['Course', 'Instructor', 'Type', 'Force Room', 'Force Time Slot']
+            for col in strip_columns:
+                if col in self.courses_df.columns:
+                    self.courses_df[col] = self.courses_df[col].apply(
+                        lambda x: x.strip() if isinstance(x, str) else x
+                    )
+
             # Check for duplicate courses
             courses = self.courses_df['Course']
             if len(courses) != len(courses.unique()):
@@ -263,6 +270,13 @@ class InstructorScheduler:
             if self.course_types[course] == self.slot_types[t]
         ])
         self.x = LpVariable.dicts("x", list(self.keys), cat='Binary')
+
+        course_key_counts = {course: 0 for course in self.courses}
+        for course, _, _ in self.keys:
+            course_key_counts[course] += 1
+        missing = [course for course, count in course_key_counts.items() if count == 0]
+        if missing:
+            raise ValueError(f"No feasible assignments for course(s): {missing}")
 
         # Create dictionaries for time slot start and end times (in minutes)
         self.slot_start_minutes = {
