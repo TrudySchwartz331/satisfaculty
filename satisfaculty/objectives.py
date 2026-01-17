@@ -7,7 +7,7 @@ in different orders to create customized optimization strategies.
 """
 
 from .objective_base import ObjectiveBase
-from pulp import lpSum
+from pulp import lpSum, LpAffineExpression
 from .scheduler import filter_keys
 from .utils import time_to_minutes
 from typing import Optional, List
@@ -134,6 +134,43 @@ class MinimizeClassesAfter(ObjectiveBase):
 
         filtered = filter_keys(scheduler.keys, predicate=matches_criteria)
         return lpSum(scheduler.x[k] for k in filtered)
+
+
+class MinimizeMinutesAfter(ObjectiveBase):
+    """
+    Minimize total minutes of class time scheduled after a given time.
+
+    Unlike MinimizeClassesAfter which counts the number of classes,
+    this counts the actual minutes past the threshold. Useful for
+    soft preferences where some overage is acceptable but should be minimized.
+    """
+
+    def __init__(self, time: str, tolerance: float = 0.0):
+        """
+        Args:
+            time: Time in HH:MM format (e.g., "16:00")
+            tolerance: Fractional tolerance for lexicographic constraint
+        """
+        self.time_minutes = time_to_minutes(time)
+
+        super().__init__(
+            name=f"Minimize minutes after {time}",
+            sense='minimize',
+            tolerance=tolerance
+        )
+
+    def evaluate(self, scheduler):
+        terms = []
+        for course, room, time_slot in scheduler.keys:
+            slot_end = scheduler.slot_end_minutes[time_slot]
+            if slot_end > self.time_minutes:
+                minutes_after = slot_end - self.time_minutes
+                num_days = len(scheduler.slot_days[time_slot])
+                terms.append(minutes_after * num_days * scheduler.x[(course, room, time_slot)])
+
+        if not terms:
+            return LpAffineExpression()
+        return lpSum(terms)
 
 
 class MaximizePreferredRooms(ObjectiveBase):
