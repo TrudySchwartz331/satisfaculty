@@ -6,6 +6,7 @@ from .objectives import (
     MinimizeClassesAfter,
     MaximizePreferredRooms,
     MinimizePreferredRooms,
+    MaximizeLabRootDayPairs,
 )
 from .constraints import (
     AssignAllCourses,
@@ -25,6 +26,7 @@ __all__ = [
     "MinimizeClassesAfter",
     "MaximizePreferredRooms",
     "MinimizePreferredRooms",
+    "MaximizeLabRootDayPairs",
     # Constraints
     "AssignAllCourses",
     "NoInstructorOverlap",

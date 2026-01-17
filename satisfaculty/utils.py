@@ -18,7 +18,7 @@ def minutes_to_time(minutes):
 
 
 def expand_days(days_str):
-    """Expand day codes to individual days. MWF -> [M, W, F], TTH -> [T, TH]"""
+    """Expand day codes to individual days. MWF -> [M, W, F], TTH -> [T, TH]."""
     if days_str == "MWF":
         return ['M', 'W', 'F']
     elif days_str == "TTH":
@@ -26,3 +26,17 @@ def expand_days(days_str):
     else:
         # Single day (M, T, W, TH, F)
         return [days_str]
+
+
+def expand_days_any(days_str):
+    """Expand any day combination to individual days. MW -> [M, W], THF -> [TH, F]."""
+    days = []
+    i = 0
+    while i < len(days_str):
+        if days_str[i:i + 2] == "TH":
+            days.append("TH")
+            i += 2
+        else:
+            days.append(days_str[i])
+            i += 1
+    return days

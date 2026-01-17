@@ -10,7 +10,7 @@ import matplotlib.patches as mpatches
 from matplotlib.patches import Rectangle
 from datetime import datetime, timedelta
 import numpy as np
-from .utils import time_to_minutes, minutes_to_time, expand_days
+from .utils import time_to_minutes, minutes_to_time, expand_days_any
 
 
 def visualize_schedule(schedule_df, rooms_df, output_file='schedule_visual.png'):
@@ -19,7 +19,7 @@ def visualize_schedule(schedule_df, rooms_df, output_file='schedule_visual.png')
     # Expand schedule to have one row per day
     schedule_expanded = []
     for _, row in schedule_df.iterrows():
-        for day in expand_days(row['Days']):
+        for day in expand_days_any(row['Days']):
             schedule_expanded.append({
                 'Course': row['Course'],
                 'Room': row['Room'],

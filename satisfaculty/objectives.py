@@ -7,9 +7,9 @@ in different orders to create customized optimization strategies.
 """
 
 from .objective_base import ObjectiveBase
-from pulp import lpSum
+from pulp import lpSum, LpVariable
 from .scheduler import filter_keys
-from .utils import time_to_minutes
+from .utils import time_to_minutes, expand_days_any
 from typing import Optional, List
 
 
@@ -256,3 +256,78 @@ class MinimizePreferredRooms(ObjectiveBase):
 
         filtered = filter_keys(scheduler.keys, predicate=matches_criteria)
         return lpSum(scheduler.x[k] for k in filtered)
+
+
+class MaximizeLabRootDayPairs(ObjectiveBase):
+    """
+    Maximize pairing of lab sections sharing a root course number on specific days.
+    """
+
+    def __init__(
+        self,
+        course_types: List[str],
+        preferred_days: List[str],
+        roots: Optional[List[str]] = None,
+        tolerance: float = 0.0
+    ):
+        """
+        Args:
+            course_types: Lab course types to include (e.g., ['Lab110x1', 'Lab110x2'])
+            preferred_days: Day patterns to pair on (e.g., ['MW', 'TTH'])
+            roots: Optional list of root course numbers to include (e.g., ['ASEN 3501'])
+            tolerance: Fractional tolerance for lexicographic constraint
+        """
+        self.course_types = set(course_types)
+        self.preferred_days = set(preferred_days)
+        self.roots = set(roots) if roots else None
+
+        name = f"Pair lab roots on days ({', '.join(preferred_days)})"
+        if roots:
+            name = f"{name} for ({', '.join(roots)})"
+        super().__init__(name=name, sense='maximize', tolerance=tolerance)
+
+    def _root_key(self, course: str) -> str:
+        parts = course.split('-')
+        if len(parts) <= 1:
+            return course
+        return '-'.join(parts[:-1])
+
+    def evaluate(self, scheduler):
+        cache_key = ("lab_root_day_pairs", tuple(sorted(self.course_types)), tuple(sorted(self.preferred_days)))
+        if not hasattr(scheduler, "_objective_cache"):
+            scheduler._objective_cache = {}
+        if cache_key in scheduler._objective_cache:
+            return scheduler._objective_cache[cache_key]
+
+        # Group lab courses by root.
+        root_to_courses = {}
+        for course in scheduler.courses:
+            if scheduler.course_types.get(course) not in self.course_types:
+                continue
+            root = self._root_key(course)
+            if self.roots is not None and root not in self.roots:
+                continue
+            root_to_courses.setdefault(root, []).append(course)
+
+        # Build pairing variables and constraints.
+        pair_vars = []
+        for root, courses in root_to_courses.items():
+            if len(courses) < 2:
+                continue
+            for day in self.preferred_days:
+                safe_root = root.replace(" ", "_")
+                y = LpVariable(f"pair_{safe_root}_{day}", lowBound=0, upBound=1, cat='Binary')
+                pair_vars.append(y)
+
+                # Count how many courses of this root are scheduled on this day pattern.
+                count_on_day = lpSum(
+                    scheduler.x[k]
+                    for k in scheduler.keys
+                    if k[0] in courses and scheduler.slot_days[k[2]] == set(expand_days_any(day))
+                )
+                # y can be 1 only if at least two courses are on this day.
+                scheduler.prob += (2 * y <= count_on_day, f"pair_root_{root}_{day}")
+
+        expr = lpSum(pair_vars)
+        scheduler._objective_cache[cache_key] = expr
+        return expr

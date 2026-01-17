@@ -1,88 +1,82 @@
 Course,Instructor,Enrollment,Type,Ignore,Force Room,Force Time Slot,Note
-DEPT-1030-010,Martinez,75,Lab110x1,,,,
-DEPT-1030-020,Cooper,75,Lab110x1,,,,
-DEPT-1400-001,Sullivan,75,Lecture,,,,
-DEPT-1969-001,Sullivan,75,Lecture50x1,,,F-0830Lec,
-DEPT-2401-001,Collins,180,Lecture,,,,
-DEPT-2402-001,Graham,95,Lecture,,,,
-DEPT-2402-002,Graham,95,Lecture,,,,
-DEPT-2403-001,Reynolds,180,Lecture,,,,
-DEPT-2403-002,Garcia-Flynn,180,Lecture,,,,
-DEPT-2501-010,McMasonon,180,Lecture,,,,
-DEPT-2501-011,McMasonon,60,Lab110x1,,,,
-DEPT-2501-012,McMasonon,60,Lab110x1,,,,
-DEPT-2501-013,McMasonon,60,Lab110x1,,,,
-DEPT-2502-010,Mason,75,Lecture,,,,
-DEPT-2502-012,Mason,60,Lecture,,,,
-DEPT-2502-020,Harris,85,Lecture,,,,
-DEPT-2502-021,Harris,85,Lecture50x1,,,,
-DEPT-2502-022,Harris,85,Lecture50x2,,,,
-DEPT-3036-001,Sullivan,70,Lecture,,,,
-DEPT-3046-001,Stevens-Miller,120,Lecture,,,,
-DEPT-3300-010,Sterling,120,Lecture,,,,
-DEPT-3300-011,Sterling,60,Lab110x1,,,,
-DEPT-3300-012,Sterling,60,Lab110x1,,,,
-DEPT-3700-001,Schultz,160,Lecture,yes,,,Online no class needed
-DEPT-3711-001,Arnold,160,Lecture,,,,
-DEPT-3712-001,Kennedy,160,Lecture,,,,
-DEPT-3713-001,Lee,160,Lecture,,,,
-DEPT-3728-001,Anders,160,Lecture,,,,
-DEPT-3801-001,Reynolds,50,Lab110x2,,,,
-DEPT-3801-002,Reynolds,50,Lab110x1,,,,
-DEPT-3801-003,Reynolds,50,Lab110x1,,,,
-DEPT-3802-001,Kennedy,50,Lab110x1,,,,
-DEPT-3802-002,Kennedy,50,Lab110x1,,,,
-DEPT-3802-003,Kennedy,50,Lab110x1,,,,
-DEPT-4013-001,Allen,160,Lecture,,,,
-DEPT-4028-011,Mason,50,Lecture,,,,
-DEPT-4028-012,Harris,50,Lecture,,,,
-DEPT-4028-013,Kennedy,50,Lecture,,,,
-DEPT-4028-014,Adams,50,Lecture,,,,
-DEPT-4028-015,Reynolds,50,Lecture,,,,
-DEPT-4028-016,Wallace,50,Lecture,,,,
-DEPT-4057-010,Le Blanc,50,Lecture,,,,
-DEPT-4057-011,Le Blanc,50,Lecture,,,,
-DEPT-4138-010,Mason,60,Lecture,,,,
-DEPT-4138-011,Mason,30,Lecture,,,,
-DEPT-4138-012,Mason,30,Lecture,,,,
-DEPT-5007-001,Edwards,40,Lecture,,,,
-DEPT-5007-002,Edwards,20,Lecture,,,,
-DEPT-5010-001,Vincent,80,Lecture,,,,
-DEPT-5010-002,Vincent,40,Lecture,,,,
-DEPT-5016-001,Hayes,80,Lecture,,,,
-DEPT-5016-002,Hayes,40,Lecture,,,,
-DEPT-5121-001,Foster,30,Lecture,,,,
-DEPT-5121-002,Foster,15,Lecture,,,,
-DEPT-5151-001,Mitchell,60,Lecture,,,,
-DEPT-5151-002,Mitchell,30,Lecture,,,,
-DEPT-5226-800,Hayes,40,Lecture,,,,
-DEPT-5245-001,Parker,60,Lecture,,,,
-DEPT-5245-002,Parker,30,Lecture,,,,
-DEPT-5307-001,Newman,30,Lecture,,,,
-DEPT-5307-002,Newman,15,Lecture,,,,
-DEPT-5519-001,Arnold,40,Lecture,,,,
-DEPT-5519-002,Arnold,20,Lecture,,,,
-DEPT-5519-003,Nelson,30,Lecture,,,,
-DEPT-5519-004,Nelson,15,Lecture,,,,
-DEPT-5519-005,Shaw,30,Lecture,,,,
-DEPT-5519-006,Shaw,15,Lecture,,,,
-DEPT-5519-007,Hunter,30,Lecture,,,,
-DEPT-5519-008,Hunter,15,Lecture,,,,
-DEPT-6014-001,Schmidt,30,Lecture,,,,
-DEPT-6014-002,Schmidt,15,Lecture,,,,
-DEPT-6044-001,Anders,40,Lecture,,,,
-DEPT-6044-002,Anders,20,Lecture,,,,
-DEPT-6080-001,McMasonon,60,Lecture,,,,
-DEPT-6080-002,McMasonon,30,Lecture,,,,
-DEPT-6084-001,Holland,30,Lecture,,,,
-DEPT-6084-002,Holland,15,Lecture,,,,
-DEPT-6331-001,Jensen,30,Lecture,,,,
-DEPT-6331-002,Jensen,15,Lecture,,,,
-DEPT-6519-001,Archer,60,Lecture,,,,
-DEPT-6519-002,Archer,30,Lecture,,,,
-DEPT-6519-003,Kelly,40,Lecture,,,,
-DEPT-6519-004,Kelly,20,Lecture,,,,
-DEPT-6519-005,Lawrence,30,Lecture,,,,
-DEPT-6519-006,Lawrence,15,Lecture,,,,
-DEPT-6519-011,Schultz,30,Lecture,,,,
-DEPT-6519-012,Schultz,15,Lecture,,,,
+ASEN-1009-001,Schaub,60,Lecture50x1,,,F-1040Lec,Lecture-50 x1 A larger classroom is likely needed since this course is combined with department seminars
+ASEN-1030-010,Chu,75,Lecture50x2,,,,Lecture-50 x2
+ASEN-1030-011,Chu,75,Lab110x1,,AERO N100,,
+ASEN-1030-020,Hodgkinson,75,Lecture50x2,,,,Lecture-50 x2
+ASEN-1030-012,Hodgkinson,75,Lab110x1,,AERO N100,,
+ASEN-1403-001,Rhode,75,Lecture,,,,"Sections must be held on the same day, SEEN N136 option?"
+ASEN-1403-002,Rhode,75,Lecture,,,,"Sections must be held on the same day, SEEN N136 option?"
+ASEN-1969-001,Sobhani,100,Lecture,yes,,,Scheduled on Main MUEN; not offered in Fall before - no classroom precedent 
+ASEN-2401-001,Comandur,160,Lecture,yes,MAIN 120,,
+ASEN-2401-002,Glusman,160,Lecture,,,,
+ASEN-2402-001,Glusman,120,Lecture,,,,
+ASEN-2402-002,Glusman,60,Lecture,yes,,,May remove this extra section
+ASEN-2403-001,Ghobadi-Far,120,Lecture,,,,
+ASEN-2403-002,Ghobadi-Far,120,Lecture,yes,,,No second section for Fall?
+ASEN-2501-010,McMahon/Marshall,180,Lecture50x2,,,,Lecture-50 x2
+ASEN-2501-011,McMahon/Marshall,90,Lab110x1,,AERO 141,,
+ASEN-2501-012,McMahon/Marshall,90,Lab110x1,,AERO 141,,
+ASEN-2502-010,Mah ,180,Lecture50x2,,,,Double check conlicts for Hoke
+ASEN-2502-011,Mah,90,Lab110x1,,AERO 141,,
+ASEN-2502-012,Hoke,90,Lab110x1,,AERO 141,,
+ASEN-2519-001,Muldrow,30,Lecture,,,,Chris leaving; alt fac instructor?
+ASEN-3036-001,Sobhani,80,Lecture,yes,MAIN 120,,Only offering in Spring?
+ASEN-3046-001,Stanford-McIntyre,150,Lecture,yes,MAIN 120,,No future offerings listed for 26-27 AY
+ASEN 3401-001,Shakiba,180,Lecture,,,,
+ASEN 3402-001,Le Moine,180,Lecture,,,,
+ASEN 3403-001,Farnsworth,180,Lecture,,,,
+ASEN 3404-001,Scheeres,180,Lecture,,,,
+ASEN 3404-002,Instructor,180,Lecture,,,,Will become 3406 section in the spring
+ASEN 3405-001,Arya,75,Lecture,,,,
+ASEN 3501-010,Hodgkinson,190,Lecture50x1,,,,Lecture-50x1
+ASEN 3501-011,TA1,65,Lab110x2,,AERO 141,,Lab-110x2
+ASEN 3501-012,TA1,65,Lab110x2,,AERO 141,,Lab-110x2
+ASEN 3501-013,TA1,60,Lab110x2,,AERO 141,,Lab-110x2
+ASEN 3502-010,Sunberg,190,Lecture50x2,,,,Lecture-50x2
+ASEN 3502-011,TA2,65,Lab110x1,,,,Lab-110x1
+ASEN 3502-012,TA2,65,Lab110x1,,,,Lab-110x1
+ASEN 3502-013,TA2,60,Lab110x1,,,,Lab-110x1
+ASEN 3503-010,Morton,190,Lecture50x2,,,,Lecture-50x2
+ASEN 3503-011,TA3,95,Lab110x1,,AERO 141,,Lab-110x1
+ASEN 3503-012,TA3,95,Lab110x1,,AERO 141,,Lab-110x1
+ASEN 3503-013,TA3,60,Lab110x1,yes,AERO 141,,Lab-110x1
+ASEN-4013-001,Ali,175,Lecture,,,,
+ASEN-4018-010,Wingate,380,Lecture,yes,,,Remote lectures?
+ASEN-4018-011,Nabity,55,Lab110x2,yes,,,"Lab-110 x2, Can the algorithm address deconflicting multiple faculty for two separate lab-time options? Hayman/Nabity, Neogi/Li,  Rafi, Sternovsky/Wingate, Holinger/Matsuo, Hoke, Comandur"
+ASEN-4018-012,Neogi,55,Lab110x2,yes,,,
+ASEN-4018-013,Rafi,55,Lab110x2,yes,,,"Lab-110 x2, Breaking out labs like last year? How to do this with the algorithm"
+ASEN-4018-014,Sternovsky,55,Lab110x2,yes,,,
+ASEN-4018-015,Holizinger,55,Lab110x2,yes,,,
+ASEN-4018-016,Hoke,55,Lab110x2,yes,,,
+ASEN-4018-017,Comandur,55,Lab110x2,yes,,,
+ASEN-4057-010,Le Moine,40,Lecture50x2,,,,"Lecture - 50 x2, B2B lecture lab, two days a week at 50 minutes each section"
+ASEN-4057-011,Le Moine,40,Lab110x1,,, ,"Lab-50 x2, B2B lecture lab, two days a week at 50 minutes each section "
+ASEN-4067-010,Schwartz,40,Lecture,yes,,,"Lecture 50 (x2) Crosslisted with ASEN 5067-010, office hours scheduled on top which conflicts with the contact meeting hours required. RO is getting more strict on the math here."
+ASEN 4067-011,Schwartz,40,Lab110x1,yes,,,Crosslisted with ASEN 5067-011
+ASEN-4138-010,Mah,40,Lecture50x2,,,,Reducing cap since course may be offered both Fall and Spring
+ASEN-4138-011,Mah,40,Lab110x1,,,,Could potentially offer single lab
+ASEN-4138-012,Mah,20,Lab110x1,yes,,,Could potentially offer single lab
+ASEN-4519-001,Rafi,40,Lecture,,,,No history - flexible enrollment
+ASEN-5018-800,Marshall,60,Lecture50x1,,,,Primary Fac? Cross-listed with ASEN 6028 section - lecture can be remote
+ASEN-5018-801,Sternovsky,15,Lab110x2,,,,Cross-listed with ASEN 6028 section; complete guess on enrollment cap
+ASEN-5018-802,Tozer,15,Lab110x2,,,,Cross-listed with ASEN 6028 section; complete guess on enrollment cap
+ASEN-5018-803,Morton,15,Lab110x2,,,,Cross-listed with ASEN 6028 section; complete guess on enrollment cap
+ASEN-5018-804,Palo,15,Lab110x2,,,,Cross-listed with ASEN 6028 section; complete guess on enrollment cap
+ASEN-5044-001,Ahmed,80,Lecture,,,,
+ASEN-5050-001,Bosanac,80,Lecture,,,,
+ASEN-5051-001,Jansen,40,Lecture,,,,
+ASEN-5090-001,Axelrad,60,Lecture,,,,
+ASEN-5131-001,MacDonald,60,Lecture,,,,
+ASEN-5158-001,Clark,60,Lecture,,,,
+ASEN-5218-001,Lopez Jimenez,20,Lecture,,,,Crosslisted with ASEN 4218
+ASEN-5251-001,Minton,60,Lecture,,,,
+ASEN-5307-001,Nerem,60,Lecture,,,,
+ASEN-5335-001,Li,60,Lecture,,,,
+ASEN-5519-001,Ghobadi-Far,60,Lecture,,,,
+ASEN-5519-003,Hussein,20,Lecture,,,,
+ASEN-6010-001,Schaub,30,Lecture,,,TTH-0830,"Professor prefers 8:30 start time, TTh"
+ASEN-6116-001,Nabity,30,Lecture,,,,
+ASEN-6265-001,Chu,20,Lecture,,,,
+ASEN-6331-001,Jansen,20,Lecture,,,,
+ASEN-6337-001,Matsuo,20,Lecture,,,,
+ASEN-6412-001,Doostan,24,Lecture,,,,

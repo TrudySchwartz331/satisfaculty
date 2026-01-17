@@ -38,7 +38,12 @@ objectives = [
     MaximizePreferredRooms(['AERO 120']),
     MaximizePreferredRooms(['AERO N100', 'AERO 141'], course_type='Lab110x1'),
     MaximizePreferredRooms(['AERO N100', 'AERO 141'], course_type='Lab110x2'),
-    MinimizePreferredRooms(['MAIN 120']),
+    MaximizeLabRootDayPairs(
+        ['Lab110x1', 'Lab110x2'],
+        ['MW', 'TTH', 'WF'],
+        roots=['ASEN 2501','ASEN 2502','ASEN 3501', 'ASEN 3502', 'ASEN 3503'],
+    ),
+    #MinimizePreferredRooms(['MAIN 120']),
 ]
 
 scheduler.lexicographic_optimize(objectives)

@@ -10,7 +10,7 @@ from pulp import *
 import csv
 from typing import Dict, List, Tuple, Optional, Callable, Iterable
 from .visualize_schedule import visualize_schedule
-from .utils import time_to_minutes, expand_days
+from .utils import time_to_minutes, expand_days_any
 from .objective_base import ObjectiveBase
 from .constraint_base import ConstraintBase
 
@@ -288,7 +288,7 @@ class InstructorScheduler:
             for slot, end in zip(self.time_slots_df['Slot'], self.time_slots_df['End'])
         }
         self.slot_days = {
-            slot: set(expand_days(days))
+            slot: set(expand_days_any(days))
             for slot, days in zip(self.time_slots_df['Slot'], self.time_slots_df['Days'])
         }
 
