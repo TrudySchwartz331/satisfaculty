@@ -25,20 +25,20 @@ def test_infeasible_two_courses_one_slot():
         # 1 room
         rooms_file = os.path.join(tmpdir, 'rooms.csv')
         with open(rooms_file, 'w') as f:
-            f.write('Room,Capacity\n')
-            f.write('Room1,100\n')
+            f.write('Room,Capacity,Room Type\n')
+            f.write('Room1,100,Lecture\n')
 
         # 2 courses (same instructor to keep it simple)
         courses_file = os.path.join(tmpdir, 'courses.csv')
         with open(courses_file, 'w') as f:
-            f.write('Course,Instructor,Enrollment,Type\n')
-            f.write('Course1,Smith,50,Lecture\n')
-            f.write('Course2,Smith,50,Lecture\n')
+            f.write('Course,Instructor,Enrollment,Slot Type,Room Type\n')
+            f.write('Course1,Smith,50,Lecture,Lecture\n')
+            f.write('Course2,Smith,50,Lecture,Lecture\n')
 
         # 1 time slot
         time_slots_file = os.path.join(tmpdir, 'time_slots.csv')
         with open(time_slots_file, 'w') as f:
-            f.write('Slot,Days,Start,End,Type\n')
+            f.write('Slot,Days,Start,End,Slot Type\n')
             f.write('MWF-0830,MWF,08:30,09:20,Lecture\n')
 
         scheduler = InstructorScheduler()

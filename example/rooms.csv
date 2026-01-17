@@ -1,9 +1,9 @@
-"Room","Capacity"
-"BLDG 120",200
-"BLDG 111",80
-"BLDG 114",60
-"BLDG N240",60
-"BLDG N250",40
-"BLDG 232",30
-"BLDG 141",102
-"BLDG N100",75
+"Room","Capacity","Room Type"
+"BLDG 120",200,"Lecture"
+"BLDG 111",80,"Lecture"
+"BLDG 114",60,"Lecture"
+"BLDG N240",60,"Lecture"
+"BLDG N250",40,"Lecture"
+"BLDG 232",30,"Lecture"
+"BLDG 141",102,"Lab"
+"BLDG N100",75,"Lab"

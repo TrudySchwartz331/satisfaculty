@@ -136,7 +136,7 @@ class InstructorScheduler:
         try:
             self.courses_df = pd.read_csv(filename)
 
-            strip_columns = ['Course', 'Instructor', 'Type', 'Force Room', 'Force Time Slot']
+            strip_columns = ['Course', 'Instructor', 'Slot Type', 'Room Type', 'Force Room', 'Force Time Slot']
             for col in strip_columns:
                 if col in self.courses_df.columns:
                     self.courses_df[col] = self.courses_df[col].apply(
@@ -193,12 +193,12 @@ class InstructorScheduler:
 
     def make_overlap_predicate(self, time_slot: str, room: str | object = ALL, buffer_minutes: int = 15) -> Callable[[str, str, str], bool]:
         """
-        Create a predicate that returns True if a key overlaps with the given time slot.
+        Create a predicate that returns True if *the start time* of the time_slot argument overlaps with the slot given to the predicate.
 
         Args:
-            time_slot: The reference time slot to check overlaps against
+            time_slot: The reference time slot. Overlaps will be checked with respect to the *start time* of this slot.
             room: Room to match, or ALL to match all rooms
-            buffer_minutes: Minutes before slot start to still count as overlap (default 15)
+            buffer_minutes: Minutes before start of time_slot to still count as overlap (default 15)
         """
         t_start = self.slot_start_minutes[time_slot]
         t_days = self.slot_days[time_slot]
@@ -247,8 +247,12 @@ class InstructorScheduler:
         self.capacities = dict(zip(self.rooms_df['Room'], self.rooms_df['Capacity']))
 
         # Create dictionaries for course and time slot types
-        self.course_types = dict(zip(self.courses_df['Course'], self.courses_df['Type']))
-        self.slot_types = dict(zip(self.time_slots_df['Slot'], self.time_slots_df['Type']))
+        self.course_slot_types = dict(zip(self.courses_df['Course'], self.courses_df['Slot Type']))
+        self.slot_types = dict(zip(self.time_slots_df['Slot'], self.time_slots_df['Slot Type']))
+
+        # Create dictionaries for course and room types
+        self.course_room_types = dict(zip(self.courses_df['Course'], self.courses_df['Room Type']))
+        self.room_types = dict(zip(self.rooms_df['Room'], self.rooms_df['Room Type']))
 
         # Create matrix a; a[(instructor, course)] = 1 if instructor teaches course
         self.a = {}
@@ -261,13 +265,15 @@ class InstructorScheduler:
 
         # Create binary decision variables using LpVariable.dicts
         # x[(course, room, time)] = 1 if course is assigned to room at time slot
-        # Only create variables where course type matches time slot type
+        # Only create variables where course slot type matches time slot type
+        # and course room type matches room type
         self.keys = set([
             (course, room, t)
             for course in self.courses
             for room in self.rooms
             for t in self.time_slots
-            if self.course_types[course] == self.slot_types[t]
+            if self.course_slot_types[course] == self.slot_types[t]
+            and self.course_room_types[course] == self.room_types[room]
         ])
         self.x = LpVariable.dicts("x", list(self.keys), cat='Binary')
 

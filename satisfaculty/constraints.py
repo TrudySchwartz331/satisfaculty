@@ -56,19 +56,38 @@ class NoRoomOverlap(ConstraintBase):
         super().__init__(name="No room overlap")
 
     def apply(self, scheduler) -> int:
+        # Collect all unique (day, start_time) pairs from all time slots
+        day_start_pairs = set()
+        for slot in scheduler.time_slots:
+            start_minutes = scheduler.slot_start_minutes[slot]
+            for day in scheduler.slot_days[slot]:
+                day_start_pairs.add((day, start_minutes))
+
         count = 0
+        buffer_minutes = 15
         for room in scheduler.rooms:
-            for t in scheduler.time_slots:
-                scheduler.prob += (
-                    lpSum(
-                        scheduler.x[k] for k in filter_keys(
-                            scheduler.keys,
-                            predicate=scheduler.make_overlap_predicate(t, room=room)
-                        )
-                    ) <= 1,
-                    f"no_room_overlap_{room}_{t}"
-                )
-                count += 1
+            for day, start_minutes in day_start_pairs:
+                # Find all slots that contain this day and overlap this start time
+                overlapping_keys = []
+                for k in scheduler.keys:
+                    course, r, slot = k
+                    if r != room:
+                        continue
+                    # Check if this slot contains the specific day
+                    if day not in scheduler.slot_days[slot]:
+                        continue
+                    # Check time overlap
+                    slot_start = scheduler.slot_start_minutes[slot]
+                    slot_end = scheduler.slot_end_minutes[slot]
+                    if slot_start <= start_minutes and slot_end > (start_minutes - buffer_minutes):
+                        overlapping_keys.append(k)
+
+                if overlapping_keys:
+                    scheduler.prob += (
+                        lpSum(scheduler.x[k] for k in overlapping_keys) <= 1,
+                        f"no_room_overlap_{room}_{day}_{start_minutes}"
+                    )
+                    count += 1
         return count
 
 
@@ -99,7 +118,7 @@ class AvoidRoomsForCourseType(ConstraintBase):
     def apply(self, scheduler) -> int:
         count = 0
         for course, room, time_slot in scheduler.keys:
-            if scheduler.course_types[course] == self.course_type and room in self.rooms:
+            if scheduler.course_slot_types[course] == self.course_type and room in self.rooms:
                 scheduler.x[(course, room, time_slot)].upBound = 0
                 count += 1
         return count

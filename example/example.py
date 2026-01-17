@@ -16,15 +16,16 @@ scheduler.load_time_slots('time_slots.csv')
 # Add constraints (required for a valid schedule)
 scheduler.add_constraints([
     AssignAllCourses(),
-    NoInstructorOverlap(),
+    # NoInstructorOverlap(),
     NoRoomOverlap(),
-    RoomCapacity(),
+    # RoomCapacity(),
     ForceRooms(),
     ForceTimeSlots(),
 ])
 
 # Define lexicographic optimization objectives (in priority order)
 objectives = [
+    MinimizeClassesAfter('17:00'),
     MinimizeClassesBefore('9:00'),
 ]
 

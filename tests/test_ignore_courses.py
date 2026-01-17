@@ -17,15 +17,15 @@ def test_ignore_column_filters_courses():
     with tempfile.TemporaryDirectory() as tmpdir:
         rooms_file = os.path.join(tmpdir, 'rooms.csv')
         with open(rooms_file, 'w') as f:
-            f.write('Room,Capacity\n')
-            f.write('Room1,100\n')
+            f.write('Room,Capacity,Room Type\n')
+            f.write('Room1,100,Lecture\n')
 
         courses_file = os.path.join(tmpdir, 'courses.csv')
         with open(courses_file, 'w') as f:
-            f.write('Course,Instructor,Enrollment,Type,Ignore\n')
-            f.write('Course1,Smith,50,Lecture,\n')
-            f.write('Course2,Smith,50,Lecture,TRUE\n')
-            f.write('Course3,Jones,50,Lecture,false\n')
+            f.write('Course,Instructor,Enrollment,Slot Type,Room Type,Ignore\n')
+            f.write('Course1,Smith,50,Lecture,Lecture,\n')
+            f.write('Course2,Smith,50,Lecture,Lecture,TRUE\n')
+            f.write('Course3,Jones,50,Lecture,Lecture,false\n')
 
         scheduler = InstructorScheduler()
         scheduler.load_rooms(rooms_file)
@@ -45,18 +45,18 @@ def test_ignore_column_accepts_various_truthy_values():
     with tempfile.TemporaryDirectory() as tmpdir:
         rooms_file = os.path.join(tmpdir, 'rooms.csv')
         with open(rooms_file, 'w') as f:
-            f.write('Room,Capacity\n')
-            f.write('Room1,100\n')
+            f.write('Room,Capacity,Room Type\n')
+            f.write('Room1,100,Lecture\n')
 
         courses_file = os.path.join(tmpdir, 'courses.csv')
         with open(courses_file, 'w') as f:
-            f.write('Course,Instructor,Enrollment,Type,Ignore\n')
-            f.write('Course1,Smith,50,Lecture,TRUE\n')
-            f.write('Course2,Smith,50,Lecture,true\n')
-            f.write('Course3,Smith,50,Lecture,1\n')
-            f.write('Course4,Smith,50,Lecture,yes\n')
-            f.write('Course5,Smith,50,Lecture,YES\n')
-            f.write('Course6,Smith,50,Lecture,\n')  # Keep this one
+            f.write('Course,Instructor,Enrollment,Slot Type,Room Type,Ignore\n')
+            f.write('Course1,Smith,50,Lecture,Lecture,TRUE\n')
+            f.write('Course2,Smith,50,Lecture,Lecture,true\n')
+            f.write('Course3,Smith,50,Lecture,Lecture,1\n')
+            f.write('Course4,Smith,50,Lecture,Lecture,yes\n')
+            f.write('Course5,Smith,50,Lecture,Lecture,YES\n')
+            f.write('Course6,Smith,50,Lecture,Lecture,\n')  # Keep this one
 
         scheduler = InstructorScheduler()
         scheduler.load_rooms(rooms_file)
@@ -74,14 +74,14 @@ def test_default_ignore_column_used_when_exists():
     with tempfile.TemporaryDirectory() as tmpdir:
         rooms_file = os.path.join(tmpdir, 'rooms.csv')
         with open(rooms_file, 'w') as f:
-            f.write('Room,Capacity\n')
-            f.write('Room1,100\n')
+            f.write('Room,Capacity,Room Type\n')
+            f.write('Room1,100,Lecture\n')
 
         courses_file = os.path.join(tmpdir, 'courses.csv')
         with open(courses_file, 'w') as f:
-            f.write('Course,Instructor,Enrollment,Type,Ignore\n')
-            f.write('Course1,Smith,50,Lecture,TRUE\n')
-            f.write('Course2,Smith,50,Lecture,\n')
+            f.write('Course,Instructor,Enrollment,Slot Type,Room Type,Ignore\n')
+            f.write('Course1,Smith,50,Lecture,Lecture,TRUE\n')
+            f.write('Course2,Smith,50,Lecture,Lecture,\n')
 
         scheduler = InstructorScheduler()
         scheduler.load_rooms(rooms_file)
@@ -99,14 +99,14 @@ def test_ignore_column_disabled_with_none():
     with tempfile.TemporaryDirectory() as tmpdir:
         rooms_file = os.path.join(tmpdir, 'rooms.csv')
         with open(rooms_file, 'w') as f:
-            f.write('Room,Capacity\n')
-            f.write('Room1,100\n')
+            f.write('Room,Capacity,Room Type\n')
+            f.write('Room1,100,Lecture\n')
 
         courses_file = os.path.join(tmpdir, 'courses.csv')
         with open(courses_file, 'w') as f:
-            f.write('Course,Instructor,Enrollment,Type,Ignore\n')
-            f.write('Course1,Smith,50,Lecture,TRUE\n')
-            f.write('Course2,Smith,50,Lecture,\n')
+            f.write('Course,Instructor,Enrollment,Slot Type,Room Type,Ignore\n')
+            f.write('Course1,Smith,50,Lecture,Lecture,TRUE\n')
+            f.write('Course2,Smith,50,Lecture,Lecture,\n')
 
         scheduler = InstructorScheduler()
         scheduler.load_rooms(rooms_file)
@@ -123,13 +123,13 @@ def test_ignore_column_missing_is_silently_ignored():
     with tempfile.TemporaryDirectory() as tmpdir:
         rooms_file = os.path.join(tmpdir, 'rooms.csv')
         with open(rooms_file, 'w') as f:
-            f.write('Room,Capacity\n')
-            f.write('Room1,100\n')
+            f.write('Room,Capacity,Room Type\n')
+            f.write('Room1,100,Lecture\n')
 
         courses_file = os.path.join(tmpdir, 'courses.csv')
         with open(courses_file, 'w') as f:
-            f.write('Course,Instructor,Enrollment,Type\n')
-            f.write('Course1,Smith,50,Lecture\n')
+            f.write('Course,Instructor,Enrollment,Slot Type,Room Type\n')
+            f.write('Course1,Smith,50,Lecture,Lecture\n')
 
         scheduler = InstructorScheduler()
         scheduler.load_rooms(rooms_file)
@@ -151,18 +151,18 @@ def test_ignore_makes_infeasible_problem_feasible():
     with tempfile.TemporaryDirectory() as tmpdir:
         rooms_file = os.path.join(tmpdir, 'rooms.csv')
         with open(rooms_file, 'w') as f:
-            f.write('Room,Capacity\n')
-            f.write('Room1,100\n')
+            f.write('Room,Capacity,Room Type\n')
+            f.write('Room1,100,Lecture\n')
 
         courses_file = os.path.join(tmpdir, 'courses.csv')
         with open(courses_file, 'w') as f:
-            f.write('Course,Instructor,Enrollment,Type,Ignore\n')
-            f.write('Course1,Smith,50,Lecture,\n')
-            f.write('Course2,Smith,50,Lecture,TRUE\n')  # Ignore this one
+            f.write('Course,Instructor,Enrollment,Slot Type,Room Type,Ignore\n')
+            f.write('Course1,Smith,50,Lecture,Lecture,\n')
+            f.write('Course2,Smith,50,Lecture,Lecture,TRUE\n')  # Ignore this one
 
         time_slots_file = os.path.join(tmpdir, 'time_slots.csv')
         with open(time_slots_file, 'w') as f:
-            f.write('Slot,Days,Start,End,Type\n')
+            f.write('Slot,Days,Start,End,Slot Type\n')
             f.write('MWF-0830,MWF,08:30,09:20,Lecture\n')
 
         scheduler = InstructorScheduler()
