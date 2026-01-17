@@ -4,6 +4,7 @@ from .scheduler import InstructorScheduler
 from .objectives import (
     MinimizeClassesBefore,
     MinimizeClassesAfter,
+    MinimizeMinutesAfter,
     MaximizePreferredRooms,
     MinimizePreferredRooms,
 )
@@ -23,6 +24,7 @@ __all__ = [
     # Objectives
     "MinimizeClassesBefore",
     "MinimizeClassesAfter",
+    "MinimizeMinutesAfter",
     "MaximizePreferredRooms",
     "MinimizePreferredRooms",
     # Constraints

@@ -530,6 +530,8 @@ class InstructorScheduler:
 
             # Get optimal value
             optimal_value = value(self.prob.objective)
+            if optimal_value is None:
+                optimal_value = 0.0
             print(f"  ✓ Optimal value: {optimal_value:.2f}")
 
             # Add constraint to lock this objective (with tolerance)
