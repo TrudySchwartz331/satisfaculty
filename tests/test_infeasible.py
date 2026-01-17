@@ -38,7 +38,7 @@ def test_infeasible_two_courses_one_slot():
         # 1 time slot
         time_slots_file = os.path.join(tmpdir, 'time_slots.csv')
         with open(time_slots_file, 'w') as f:
-            f.write('Slot,Days,Start,End,Type\n')
+            f.write('Slot,Days,Start,End,Slot Type\n')
             f.write('MWF-0830,MWF,08:30,09:20,Lecture\n')
 
         scheduler = InstructorScheduler()

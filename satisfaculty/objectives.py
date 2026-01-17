@@ -112,9 +112,9 @@ class MinimizeClassesAfter(ObjectiveBase):
 
     def evaluate(self, scheduler):
         def matches_criteria(course, room, time_slot):
-            # Check time constraint
-            slot_start = scheduler.slot_start_minutes[time_slot]
-            if slot_start <= self.time_minutes:
+            # Check time constraint (use end time to catch classes running past the threshold)
+            slot_end = scheduler.slot_end_minutes[time_slot]
+            if slot_end <= self.time_minutes:
                 return False
 
             # Check instructor constraint
