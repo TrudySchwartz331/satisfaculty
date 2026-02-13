@@ -7,7 +7,6 @@ from .objectives import (
     MinimizeMinutesAfter,
     MaximizePreferredRooms,
     MinimizePreferredRooms,
-    MinimizeExcessRoomCapacity,
     MinimizeRoomOrderByCourseRank,
     MaximizeBackToBackCourses,
 )
@@ -32,7 +31,6 @@ __all__ = [
     "MinimizeMinutesAfter",
     "MaximizePreferredRooms",
     "MinimizePreferredRooms",
-    "MinimizeExcessRoomCapacity",
     "MinimizeRoomOrderByCourseRank",
     "MaximizeBackToBackCourses",
     # Constraints

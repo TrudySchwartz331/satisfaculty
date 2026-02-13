@@ -283,66 +283,6 @@ class MinimizePreferredRooms(ObjectiveBase):
         return lpSum(scheduler.x[k] for k in filtered)
 
 
-class MinimizeExcessRoomCapacity(ObjectiveBase):
-    """
-    Minimize assigning courses to rooms larger than necessary.
-
-    Penalizes assignments where a course is placed in a room with capacity
-    larger than the smallest available room that can accommodate its enrollment.
-    Optionally limit the penalty to "small" courses by enrollment threshold.
-    """
-
-    def __init__(
-        self,
-        max_enrollment: Optional[int] = None,
-        tolerance: float = 0.0
-    ):
-        """
-        Args:
-            max_enrollment: If set, only penalize courses with enrollment <= this value
-            tolerance: Fractional tolerance for lexicographic constraint
-        """
-        self.max_enrollment = max_enrollment
-
-        name_parts = ["excess room capacity"]
-        if max_enrollment is not None:
-            name_parts.append(f"(enrollment <= {max_enrollment})")
-
-        super().__init__(
-            name=f"Minimize {' '.join(name_parts)}",
-            sense='minimize',
-            tolerance=tolerance
-        )
-
-    def evaluate(self, scheduler):
-        # Precompute smallest feasible room capacity for each course
-        best_fit_capacity = {}
-        for course in scheduler.courses:
-            enrollment = scheduler.enrollments[course]
-            if self.max_enrollment is not None and enrollment > self.max_enrollment:
-                continue
-
-            course_room_type = scheduler.course_room_type[course]
-            eligible_capacities = [
-                capacity
-                for room, capacity in scheduler.capacities.items()
-                if course_room_type in scheduler.room_types[room]
-                and capacity >= enrollment
-            ]
-            if eligible_capacities:
-                best_fit_capacity[course] = min(eligible_capacities)
-
-        terms = []
-        for course, room, time_slot in scheduler.keys:
-            if course not in best_fit_capacity:
-                continue
-            overage = scheduler.capacities[room] - best_fit_capacity[course]
-            if overage > 0:
-                terms.append(overage * scheduler.x[(course, room, time_slot)])
-
-        if not terms:
-            return LpAffineExpression()
-        return lpSum(terms)
 
 
 class MinimizeRoomOrderByCourseRank(ObjectiveBase):
